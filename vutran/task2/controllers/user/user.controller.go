@@ -5,16 +5,20 @@ import (
 	"strconv"
 	dto "task2/dtos/auth"
 	"task2/exceptions"
+	repositories "task2/repositories/user"
 	services "task2/services/user"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jmoiron/sqlx"
 )
 
 type UserController struct {
 	userService *services.UserService
 }
 
-func NewUserController(userService *services.UserService) *UserController {
+func NewUserController(db *sqlx.DB) *UserController {
+	userRepository := repositories.NewUserRepository(db)
+	userService := services.NewUserService(userRepository)
 	return &UserController{userService}
 }
 

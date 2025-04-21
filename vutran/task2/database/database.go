@@ -3,31 +3,17 @@ package database
 import (
 	"fmt"
 	"os"
-	"strconv"
+	"task2/config"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
 func NewDb() (*sqlx.DB, error) {
-	err := godotenv.Load()
-
-	if err != nil {
-		return nil, err
-	}
-
-	host := os.Getenv("DB_HOST")
-	port, err := strconv.Atoi(os.Getenv("DB_PORT"))
-	if err != nil {
-		return nil, err
-	}
-	user := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASSWORD")
-	dbName := os.Getenv("DB_NAME")
+	config := config.SetupConfig()
 
 	connStr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-	host, port, user, password, dbName)
+		config.Database.Host, config.Database.Port, config.Database.User, config.Database.Password, config.Database.DbName)
 
 	db, err := sqlx.Connect("postgres", connStr)
 
