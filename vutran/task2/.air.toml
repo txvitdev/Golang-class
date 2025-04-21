@@ -1,0 +1,25 @@
+# .air.toml
+
+# Phần build
+[build]
+  cmd = "go build -o './tmp/main' main.go"   # build file main.go và tạo file chạy tại tmp/main
+  bin = "./tmp/main"                       # đường dẫn đến binary sau khi build
+  full_bin = ""                          # để trống là được
+  include_ext = ["go", "tpl", "tmpl", "html"]
+  exclude_dir = ["tmp", "vendor"]        # bỏ qua những folder không cần watch
+  exclude_file = []
+  follow_symlink = false
+  dir = "."                              # theo dõi folder hiện tại
+  delay = 1000                           # độ trễ (ms) sau khi phát hiện thay đổi
+  stop_on_error = true
+
+# Phần log
+[log]
+  time = true
+
+# Màu sắc cho terminal output
+[color]
+  main = "yellow"
+  watcher = "cyan"
+  build = "green"
+  runner = "magenta"
