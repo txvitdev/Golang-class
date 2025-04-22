@@ -5,19 +5,25 @@ import (
 
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 )
 
 var emailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
 
-var emailValidator validator.Func = func(fl validator.FieldLevel) bool {
-	email := fl.Field().String()
+var uuidValidator validator.Func = func(fl validator.FieldLevel) bool {
+	field := fl.Field().String()
 
-	return emailRegex.MatchString(email)
+	_, err := uuid.Parse(field)
+
+	if err != nil {
+		return false
+	}
+
+	return true
 }
-
 
 func RegisterCustomValidator() {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		v.RegisterValidation("validEmail", emailValidator)
+		v.RegisterValidation("uuid", uuidValidator)
 	}
 }

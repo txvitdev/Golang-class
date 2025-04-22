@@ -6,6 +6,7 @@ import (
 	clientModule "task2/internal/modules/client"
 	configModule "task2/internal/modules/config"
 	databaseModule "task2/internal/modules/database"
+	roleModule "task2/internal/modules/role"
 	"task2/internal/routes"
 
 	"github.com/gin-gonic/gin"
@@ -17,6 +18,7 @@ var Module = fx.Options(
 	authModule.AuthModule,
 	configModule.ConfigModule,
 	databaseModule.DatabaseModule,
+	roleModule.RoleModule,
 	fx.Provide(routes.NewRouter),
 )
 

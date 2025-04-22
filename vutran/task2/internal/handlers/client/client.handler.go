@@ -28,7 +28,9 @@ func (h *ClientHandler) RegisterClient(c *gin.Context) {
 		return
 	}
 
-	client, err := h.clientService.RegisterClient(c.Request.Context(), req.Name, req.RedirectURIs)
+	client, err := h.clientService.RegisterClient(c.Request.Context(), req.Name, req.RedirectURIs, req.AdminEmail,
+		req.AdminPassword,
+		req.AdminFullName)
 	if err.Code != 0 {
 		c.Error(err)
 		return

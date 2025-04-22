@@ -3,7 +3,7 @@ package dto
 type SignInDto struct {
 	Email    string `form:"email" json:"email" binding:"required,email"`
 	Password string `form:"password" json:"password" binding:"required"`
-	ClientID string `json:"client_id" binding:"required"`
+	ClientID string `json:"client_id" binding:"required,uuid"`
 }
 
 type SignUpDto struct {

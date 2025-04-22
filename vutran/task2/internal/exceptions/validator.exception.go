@@ -2,7 +2,6 @@ package exceptions
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +10,6 @@ import (
 
 func HandleValidatorException(c *gin.Context) {
 	if len(c.Errors) > 0 {
-		fmt.Println("Here")
 		for _, err := range c.Errors {
 			var validationErrors validator.ValidationErrors
 			if errors.As(err.Err, &validationErrors) {
