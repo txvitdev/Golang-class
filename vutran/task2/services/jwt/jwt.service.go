@@ -9,7 +9,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateJwt(payload dto.JwtPayloadDto) (string, error) {
+func GenerateJwt(payload dto.JwtPayloadDto) (string, exceptions.HttpError) {
 	config := config.SetupConfig()
 	claims := jwt.MapClaims{
 		"sub":     payload.Sub,
@@ -25,5 +25,5 @@ func GenerateJwt(payload dto.JwtPayloadDto) (string, error) {
 		return "", exceptions.NewInternal("")
 	}
 
-	return tokenString, nil
+	return tokenString, exceptions.HttpError{}
 }

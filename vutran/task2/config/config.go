@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 	"strconv"
-	"sync"
 
 	"github.com/joho/godotenv"
 )
@@ -23,37 +22,30 @@ type Config struct {
 	JwtSecret string
 }
 
-var config *Config
-var once sync.Once
-
 func SetupConfig() *Config {
-	once.Do(func() {
-		err := godotenv.Load()
+	err := godotenv.Load()
 
-		if err != nil {
-			log.Fatal("Something went wrong")
-		}
+	if err != nil {
+		log.Fatal("Something went wrong")
+	}
 
-		nodeEnv := os.Getenv("NODE_ENV")
+	nodeEnv := os.Getenv("NODE_ENV")
 
-		if nodeEnv == "" {
-			log.Fatal("Missing node env")
-		}
+	if nodeEnv == "" {
+		log.Fatal("Missing node env")
+	}
 
-		jwtSecret := os.Getenv("JWT_SECRET")
+	jwtSecret := os.Getenv("JWT_SECRET")
 
-		if jwtSecret == "" {
-			log.Fatal("Missing jwt secret")
-		}
+	if jwtSecret == "" {
+		log.Fatal("Missing jwt secret")
+	}
 
-		config = &Config{
-			Database:  SetupDatabaseEnvironment(),
-			NodeEnv:   nodeEnv,
-			JwtSecret: jwtSecret,
-		}
-
-	})
-	return config
+	return &Config{
+		Database:  SetupDatabaseEnvironment(),
+		NodeEnv:   nodeEnv,
+		JwtSecret: jwtSecret,
+	}
 }
 
 func SetupDatabaseEnvironment() DatabaseConfig {

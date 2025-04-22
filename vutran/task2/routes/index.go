@@ -23,6 +23,7 @@ func InitialRouter(db *sqlx.DB) *gin.Engine {
 		{
 			// Public api
 			authRouter.POST("/sign-up", gin.Bind(dto.SignUpDto{}), userController.Create())
+			// authRouter.POST("/sign-in", gin.Bind(dto.SignInDto{}), auth)
 		}
 		{
 			userRouter.POST("/", gin.Bind(dto.SignUpDto{}), userController.Create())

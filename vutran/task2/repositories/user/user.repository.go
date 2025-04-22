@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"fmt"
+	dto "task2/dtos/auth"
 	entities "task2/entities/user"
 	"task2/exceptions"
 
@@ -17,23 +18,11 @@ func NewUserRepository(db *sqlx.DB) *UserRepository {
 	return &UserRepository{db}
 }
 
-func (userRepository *UserRepository) Save(ctx context.Context, email, password string) (entities.User, exceptions.HttpError) {
-	// Check email existed
-	var emailExisted bool
-	err := userRepository.db.GetContext(ctx, &emailExisted, "SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)", email)
-
-	if err != nil {
-		return entities.User{}, exceptions.NewInternal("")
-	}
-
-	if emailExisted {
-		return entities.User{}, exceptions.NewConflict("Email existed")
-	}
-
+func (userRepository *UserRepository) Save(ctx context.Context, signUpDto *dto.SignUpDto) (entities.User, exceptions.HttpError) {
 	query := "INSERT INTO users (email, password) VALUES($1, $2) RETURNING id"
 	
 	var id int64
-	err = userRepository.db.QueryRowContext(ctx, query, email, password).Scan(&id)
+	err := userRepository.db.QueryRowContext(ctx, query, signUpDto.Email, signUpDto.Password).Scan(&id)
 
 	if err != nil {
 		return entities.User{}, exceptions.NewInternal("")
@@ -72,3 +61,16 @@ func (userRepository *UserRepository) FindByEmail(context context.Context, email
 
 	return user, exceptions.HttpError{}
 }
+
+func (userRepository *UserRepository) IsEmailExisted(ctx context.Context, email string) (bool, exceptions.HttpError) {
+	var isExisted bool
+
+	err := userRepository.db.GetContext(ctx, &isExisted, "SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)", email)
+
+	if err != nil {
+		return false, exceptions.NewInternal("")
+	}
+
+	return isExisted, exceptions.HttpError{}
+} 
+
